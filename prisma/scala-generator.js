@@ -47,13 +47,6 @@ function mapPrismaTypeToScala(prismaType, isRequired) {
 
 function toPascalCase(str) {
   return str
-    .split("_")
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join("");
-}
-
-if (require.main === module) {
-  require("@prisma/generator-helper").generatorHandler({
-    onGenerate: main,
-  });
+    .replace(/[_\s]+(.)?/g, (_, c) => c ? c.toUpperCase() : "")
+    .replace(/^./, (m) => m.toUpperCase());
 }
