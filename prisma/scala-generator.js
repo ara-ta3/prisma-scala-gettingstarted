@@ -47,10 +47,6 @@ function mapPrismaTypeToScala(prismaType, isRequired) {
 // ジェネレーターを実行
 if (require.main === module) {
   require("@prisma/generator-helper").generatorHandler({
-    onManifest: () => ({
-      defaultOutput: "./generated",
-      prettyName: "Scala Case Class Generator",
-    }),
     onGenerate: main,
   });
 }
