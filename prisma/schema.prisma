@@ -1,6 +1,6 @@
 generator scala {
   provider = "node ./prisma/scala-generator.js"
-  output   = "./"
+  output   = "../dist"
 }
 
 datasource db {
