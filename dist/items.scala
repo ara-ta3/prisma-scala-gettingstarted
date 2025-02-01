@@ -1,4 +1,4 @@
-case class items(
+case class Items(
     id: Int,
     name: String,
     description: Option[String],

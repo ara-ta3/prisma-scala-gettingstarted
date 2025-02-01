@@ -1,4 +1,4 @@
-case class current_cart(
+case class CurrentCart(
     id: Int,
     user_id: Int,
     item_id: Int,

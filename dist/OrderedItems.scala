@@ -1,4 +1,4 @@
-case class ordered_items(
+case class OrderedItems(
     id: Int,
     order_id: Int,
     item_id: Int,

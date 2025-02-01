@@ -1,4 +1,4 @@
-case class orders(
+case class Orders(
     id: Int,
     user_id: Int,
     order_date: Option[java.time.LocalDateTime],

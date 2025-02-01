@@ -1,4 +1,4 @@
-case class users(
+case class Users(
     id: Int,
     username: String,
     email: String,
