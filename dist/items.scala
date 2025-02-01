@@ -7,6 +7,6 @@ case class Items(
     description: Option[String],
     price: BigDecimal,
     stock: Option[Int],
-    current_cart: String,
-    ordered_items: String
+    currentCart: String,
+    orderedItems: String
 )

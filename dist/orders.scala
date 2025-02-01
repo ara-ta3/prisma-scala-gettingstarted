@@ -3,9 +3,9 @@ package com.example
 
 case class Orders(
     id: Int,
-    user_id: Int,
-    order_date: Option[java.time.LocalDateTime],
-    total_amount: BigDecimal,
-    ordered_items: String,
+    userId: Int,
+    orderDate: Option[java.time.LocalDateTime],
+    totalAmount: BigDecimal,
+    orderedItems: String,
     users: String
 )

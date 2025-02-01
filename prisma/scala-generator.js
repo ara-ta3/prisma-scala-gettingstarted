@@ -17,7 +17,8 @@ generatorHandler({
       const fileName = className + ".scala";
 
       const fields = model.fields.map((field) => {
-        return `    ${field.name}: ${
+        const f = toCamelCase(field.name);
+        return `    ${f}: ${
           mapPrismaTypeToScala(field.type, field.isRequired)
         }`;
       }).join(",\n");
@@ -54,4 +55,10 @@ function toPascalCase(str) {
   return str
     .replace(/[_\s]+(.)?/g, (_, c) => c ? c.toUpperCase() : "")
     .replace(/^./, (m) => m.toUpperCase());
+}
+
+function toCamelCase(str) {
+  return str
+    .replace(/[_\s]+(.)?/g, (_, c) => (c ? c.toUpperCase() : ""))
+    .replace(/^./, (m) => m.toLowerCase());
 }

@@ -3,10 +3,10 @@ package com.example
 
 case class OrderedItems(
     id: Int,
-    order_id: Int,
-    item_id: Int,
+    orderId: Int,
+    itemId: Int,
     quantity: Int,
-    price_at_purchase: BigDecimal,
+    priceAtPurchase: BigDecimal,
     orders: String,
     items: String
 )
