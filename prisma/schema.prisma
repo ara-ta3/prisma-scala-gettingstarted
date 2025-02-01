@@ -1,0 +1,63 @@
+generator scala {
+  provider = "node ./prisma/scala-generator.js"
+  output   = "./"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model current_cart {
+  id       Int   @id @default(autoincrement())
+  user_id  Int   @unique(map: "user_id")
+  item_id  Int
+  quantity Int   @default(1)
+  users    users @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "current_cart_ibfk_1")
+  items    items @relation(fields: [item_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "current_cart_ibfk_2")
+
+  @@index([item_id], map: "item_id")
+}
+
+model items {
+  id            Int             @id @default(autoincrement())
+  name          String          @db.VarChar(255)
+  description   String?         @db.Text
+  price         Decimal         @db.Decimal(10, 2)
+  stock         Int?            @default(0)
+  current_cart  current_cart[]
+  ordered_items ordered_items[]
+}
+
+model ordered_items {
+  id                Int     @id @default(autoincrement())
+  order_id          Int
+  item_id           Int
+  quantity          Int
+  price_at_purchase Decimal @db.Decimal(10, 2)
+  orders            orders  @relation(fields: [order_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "ordered_items_ibfk_1")
+  items             items   @relation(fields: [item_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "ordered_items_ibfk_2")
+
+  @@index([item_id], map: "item_id")
+  @@index([order_id], map: "order_id")
+}
+
+model orders {
+  id            Int             @id @default(autoincrement())
+  user_id       Int
+  order_date    DateTime?       @default(now()) @db.Timestamp(0)
+  total_amount  Decimal         @db.Decimal(10, 2)
+  ordered_items ordered_items[]
+  users         users           @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "orders_ibfk_1")
+
+  @@index([user_id], map: "user_id")
+}
+
+model users {
+  id            Int           @id @default(autoincrement())
+  username      String        @unique(map: "username") @db.VarChar(255)
+  email         String        @unique(map: "email") @db.VarChar(255)
+  password_hash String        @db.VarChar(255)
+  current_cart  current_cart?
+  orders        orders[]
+}
