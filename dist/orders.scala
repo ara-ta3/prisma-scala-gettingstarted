@@ -1,3 +1,6 @@
+
+package com.example
+
 case class Orders(
     id: Int,
     user_id: Int,

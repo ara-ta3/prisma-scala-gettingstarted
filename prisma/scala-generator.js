@@ -22,7 +22,12 @@ generatorHandler({
         }`;
       }).join(",\n");
 
-      const scalaClass = `case class ${className}(\n${fields}\n)`;
+      const scalaClass = `
+package com.example
+
+case class ${className}(
+${fields}
+)`;
 
       const filePath = path.join(outputDir, fileName);
       writeFileSync(filePath, scalaClass);

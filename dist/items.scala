@@ -1,3 +1,6 @@
+
+package com.example
+
 case class Items(
     id: Int,
     name: String,

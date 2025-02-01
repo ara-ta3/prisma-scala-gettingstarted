@@ -1,3 +1,6 @@
+
+package com.example
+
 case class CurrentCart(
     id: Int,
     user_id: Int,

@@ -1,3 +1,6 @@
+
+package com.example
+
 case class Users(
     id: Int,
     username: String,
