@@ -1,35 +1,36 @@
 #!/usr/bin/env node
 const { writeFileSync, mkdirSync } = require("fs");
 const path = require("path");
+const { generatorHandler } = require("@prisma/generator-helper");
 
-async function main(options) {
-  console.log("Prisma Custom Generator: Running...");
+generatorHandler({
+  onManifest: () => ({}),
 
-  // Prisma から取得したモデルデータを出力
-  console.log(
-    "Models:",
-    JSON.stringify(options.dmmf.datamodel.models, null, 2),
-  );
+  onGenerate: async (options) => {
+    console.log("Prisma Custom Generator: Running...");
 
-  const outputDir = options.generator.output.value;
-  mkdirSync(outputDir, { recursive: true });
+    const outputDir = options.generator.output.value;
+    mkdirSync(outputDir, { recursive: true });
 
-  for (const model of options.dmmf.datamodel.models) {
-    const className = model.name;
-    const fields = model.fields.map((field) => {
-      return `    ${field.name}: ${
-        mapPrismaTypeToScala(field.type, field.isRequired)
-      }`;
-    }).join(",\n");
+    for (const model of options.dmmf.datamodel.models) {
+      const className = toPascalCase(model.name);
+      const fileName = className + ".scala";
 
-    const scalaClass = `case class ${className}(\n${fields}\n)`;
-    const filePath = path.join(outputDir, `${className}.scala`);
-    writeFileSync(filePath, scalaClass);
-    console.log(`Generated: ${filePath}`);
-  }
-}
+      const fields = model.fields.map((field) => {
+        return `    ${field.name}: ${
+          mapPrismaTypeToScala(field.type, field.isRequired)
+        }`;
+      }).join(",\n");
 
-// Prisma の型を Scala の型に変換
+      const scalaClass = `case class ${className}(\n${fields}\n)`;
+
+      const filePath = path.join(outputDir, fileName);
+      writeFileSync(filePath, scalaClass);
+      console.log(`Generated: ${filePath}`);
+    }
+  },
+});
+
 function mapPrismaTypeToScala(prismaType, isRequired) {
   const typeMapping = {
     Int: "Int",
@@ -44,7 +45,13 @@ function mapPrismaTypeToScala(prismaType, isRequired) {
   return isRequired ? scalaType : `Option[${scalaType}]`;
 }
 
-// ジェネレーターを実行
+function toPascalCase(str) {
+  return str
+    .split("_")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join("");
+}
+
 if (require.main === module) {
   require("@prisma/generator-helper").generatorHandler({
     onGenerate: main,
